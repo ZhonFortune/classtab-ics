@@ -97,14 +97,22 @@ const selectDate = (val) => {
 const route = useRoute()
 const router = useRouter()
 const user = route.params.user
-if(!user) {
+// 检查是否有参数
+if (!user) {
   router.push({ name: 'Login' })
-}else if(user) {
-  // 校验用户是否登录
-  const loginedUser = JSON.parse(localStorage.getItem('loginedUserInfo')).username
-  if(loginedUser !== user) {
-    router.push({ name: 'NotLogin' })
+} else if (user) {
+  const loginedUserInfo = localStorage.getItem('loginedUserInfo')
+  if (loginedUserInfo) {
+    const loginedUser = JSON.parse(loginedUserInfo).username
+    if (loginedUser !== user) {
+      router.push({ name: 'NotLogin' })
+    }
+  } else {
+    // 没有登录信息，重定向到登录页面
+    router.push({ name: 'Login' })
   }
+}else if (!user) {
+  // 如果没有参数 则检查是否有登录信息
 }
 
 // 获取登录用户下的课程表

@@ -14,7 +14,8 @@
                         <template #title>
                             <el-container direction="horizontal" style="display: flex; align-items: center;">
                                 <el-text type="default" style="font-size: 1.5rem; color: #000">{{ item.name }}</el-text>
-                                <el-tag :type="item.status == '在线' ? 'success' : 'error'" style="margin-left: 10px;">{{ item.status }}</el-tag>
+                                <el-tag :type="item.status == '在线' ? 'success' : 'error'" style="margin-left: 10px;">{{
+                                    item.status }}</el-tag>
                             </el-container>
                         </template>
                         <el-descriptions-item label="请求地址">{{ item.url }}</el-descriptions-item>
@@ -22,9 +23,9 @@
                             <el-tag>{{ item.method }}</el-tag>
                         </el-descriptions-item>
                         <el-descriptions-item label="请求参数">
-                            <div v-if="Array.isArray(item.params)">
+                            <!-- <div v-if="Array.isArray(item.params)">
                                 <span v-for="(param, idx) in item.params" :key="idx">{{ param }}{{ idx <
-                                        item.params.length - 1 ? ', ' : '' }}</span>
+                                    item.params.length - 1 ? ', ' : '' }}</span>
                             </div>
                             <div v-else-if="typeof item.params === 'object' && item.params !== null">
                                 <span v-for="(value, key, idx) in item.params" :key="key">{{ key }}: {{ value }}{{ idx <
@@ -32,7 +33,7 @@
                             </div>
                             <div v-else>
                                 {{ item.params }}
-                            </div>
+                            </div> -->
                         </el-descriptions-item>
                     </el-descriptions>
                 </el-header>
@@ -104,4 +105,3 @@ export default {
     name: 'Api'
 }
 </script>
-
