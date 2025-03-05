@@ -35,10 +35,10 @@
               <el-image style="height: 20px; width: 20px; margin-left: 10px;"
                 src='https://help.apple.com/assets/6758C14AEA2BBD75D7023772/6758C14FEA2BBD75D702377E/zh_CN/224e500e33800bab41d4d52df6690f11.png' />
             </div>
-            <el-link type="primary" href="https://support.apple.com/zh-cn/102680" target="_blank
+            <el-button link type="primary" @click="appleSupport102680" target="_blank
             ">
               如何使用IPHONE扫描二维码 ?
-            </el-link>
+            </el-button>
           </el-main>
         </el-container>
       </el-card>
@@ -140,6 +140,11 @@ onMounted(() => {
 
 <script lang="ts">
 export default {
-  name: 'Home'
+  name: 'Home',
+  methods: {
+    appleSupport102680() {
+      window.open('https://support.apple.com/zh-cn/102680',"_blank")
+    }
+  }
 }
 </script>
