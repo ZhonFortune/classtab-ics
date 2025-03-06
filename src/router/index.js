@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Api from '@/views/Api.vue';
-import Database from '@/views/Database.vue';
 import Class from '@/views/Class.vue';
+import Duration from '@/views/Duration.vue';
+import Term from '@/views/Term.vue';
 import Document from '@/views/Document.vue';
-import User from '@/views/User.vue';
 import Setting from '@/views/Setting.vue';
 import About from '@/views/About.vue';
 import Login from '@/views/Login.vue';
@@ -61,11 +61,11 @@ const routes = [
     }
   },
   {
-    path: '/notlogin',
-    name: 'NotLogin',
-    component: NotLogin,
+    path: '/duration/:user',
+    name: 'Duration',
+    component: Duration,
     meta: {
-      title: '未登录提示'
+      title: '节时页面'
     }
   },
   {
@@ -77,11 +77,11 @@ const routes = [
     }
   },
   {
-    path: '/database',
-    name: 'Database',
-    component: Database,
+    path: '/term/:user',
+    name: 'Term',
+    component: Term,
     meta: {
-      title: '数据库页面'
+      title: '学期页面'
     }
   },
   {
@@ -93,19 +93,19 @@ const routes = [
     }
   },
   {
-    path: '/user',
-    name: 'User',
-    component: User,
-    meta: {
-      title: '用户页面'
-    }
-  },
-  {
     path: '/about',
     name: 'About',
     component: About,
     meta: {
       title: '关于页面'
+    }
+  },
+  {
+    path: '/notlogin',
+    name: 'NotLogin',
+    component: NotLogin,
+    meta: {
+      title: '未登录提示'
     }
   },
   {

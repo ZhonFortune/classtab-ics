@@ -28,6 +28,7 @@
           </el-tag>
         </el-container>
   
+        <!-- 多语言 -->
         <el-container style="
           height: 100%; flex: 0 0 auto;
           display: flex; flex-direction: row-reverse; align-items: center;
@@ -46,6 +47,7 @@
             </el-dropdown>
           </el-container> 
           
+          <!-- 通知 -->
           <el-container style="
             height: 100%; margin-right: 25px;
             display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center;
@@ -63,6 +65,22 @@
             </el-tooltip>
           </el-container>
 
+          <!-- 登出 -->
+          <el-container style="
+            height: 100%; margin-right: 25px;
+            display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center;
+          ">
+            <el-tooltip effect='light' placement="bottom" content="退出登录">
+              <el-button type="primary" effect="dark" size="small" style="cursor: pointer;" @click="confirmLogout">
+                <el-icon :size="12">
+                  <svg t="1741240940111" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3778" width="200" height="200"><path d="M619.861333 910.779733h153.053867A148.855467 148.855467 0 0 0 921.6 762.094933V262.2464a148.957867 148.957867 0 0 0-148.6848-149.026133H619.861333a101.1712 101.1712 0 0 0-100.932266 100.932266A101.1712 101.1712 0 0 0 619.861333 315.050667h99.874134v394.171733H619.861333a100.9664 100.9664 0 0 0-100.932266 100.932267 100.898133 100.898133 0 0 0 100.932266 100.590933z" p-id="3779" fill="#ffffff"></path><path d="M319.488 324.539733A33.655467 33.655467 0 0 1 355.328 320.853333a33.518933 33.518933 0 0 1 18.978133 30.481067v60.962133h206.2336c18.6368 0 33.8944 14.916267 33.8944 33.860267v132.096a33.962667 33.962667 0 0 1-33.8944 33.860267h-206.2336v60.962133c0 12.868267-7.441067 24.712533-18.978133 30.481067-11.844267 5.7344-25.736533 4.061867-35.874133-3.754667L115.268267 538.965333a33.928533 33.928533 0 0 1 0-53.179733L319.488 324.539733z" p-id="3780" fill="#ffffff"></path></svg>
+                </el-icon>
+                <el-text style="margin-left: 5px; color: white" size="small">登出</el-text>
+              </el-button>
+            </el-tooltip>
+          </el-container>
+
+          <!-- 当前登录用户 -->
           <el-container style="
             height: 100%; margin-right: 25px;
             display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center;
@@ -111,20 +129,65 @@
 
 <script setup lang="js">
 import { ref } from 'vue'
-import { ElDrawer,ElButton } from 'element-plus'
-const drawer1 = ref(false)
+import { ElDrawer, ElButton, ElMessageBox } from 'element-plus'
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+const drawer1 = ref(false)
 const displayLoginedUser = ref('未登录')
+
+// 登出确认函数
+const confirmLogout = () => {
+  // 判断是否登录
+  const user = localStorage.getItem('loginedUserInfo')
+  if (user) {
+    ElMessageBox.confirm(
+    '您确定要退出登录吗？',
+    '确认登出',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    .then(() => {
+        // 用户点击确定，执行登出操作
+        logout()
+      })
+    .catch(() => {
+        // 用户点击取消，不做任何操作
+    })
+  }else if (!user){
+    ElMessage({
+      type: 'warning',
+      message: '您还未登录',
+      showClose: true
+    })
+  }else{
+    ElMessage({
+      type: 'error',
+      message: '发生错误',
+      showClose: true
+    })
+  }
+}
+
+// 登出
+const logout = () => {
+  // 清除localStorage中的loginedUserInfo
+  localStorage.removeItem('loginedUserInfo')
+  // 跳转到登录页面
+  router.push({
+    name: "Login"
+  })
+}
 </script>
 
 <script lang="js">
 import { ElMessage } from 'element-plus';
+
 export default {
   name: 'pagehead',
   data() {
-    return {
-      displayLoginedUser: ref(this.$store),
-    }
   },
   methods: {
     ShowMessageOnUse() {
