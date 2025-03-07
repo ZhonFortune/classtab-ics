@@ -116,7 +116,7 @@ if (!user) {
 }
 
 // 获取登录用户下的课程表
-const host = "http://127.0.0.1:6058"
+const host = "http://" + JSON.parse(localStorage.getItem('backendHost')).host || 'http://127.0.0.1:6058'
 const getUserClassTable = () => {
   // 获取用户信息
   const uname = JSON.parse(localStorage.getItem('loginedUserInfo')).username

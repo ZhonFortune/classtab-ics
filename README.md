@@ -83,3 +83,18 @@ http://localhost:6058
 - [SQLite](https://www.sqlite.org/index.html)
 
 ---
+
+<br>
+
+# 更新日志 :bookmark_tabs:
+
+```shell
+#2023-03-29
+#Beta 0.1.9
+
+- [新增] Page > Duration页面用于添加和展示课程节时配置
+- [新增] Setting > 后端接口地址配置
+- [优化] API > 优化其UI
+- [修改] API > 各页面的接口调用方式
+- [修复] BUG > 去掉了一些老BUG 添加了一些新BUG
+```

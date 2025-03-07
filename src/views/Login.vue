@@ -60,6 +60,7 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router'
 import axios from 'axios';
+const host = "http://" + JSON.parse(localStorage.getItem('backendHost')).host || 'http://127.0.0.1:6058'
 
 const router = useRouter()
 
@@ -78,7 +79,6 @@ const login = () => { // 登入
         return
     }else {
         // 发送请求
-        const host = 'http://127.0.0.1:6058'
         const api = '/login/verify?'
         const query = "t=" + new Date().getTime() + "&v=1" + "&uname=" + data.username + "&pwd=" + data.password
         const apiurl = host + api + query
@@ -131,7 +131,6 @@ const createUser = () => { // 创建用户
         return
     }else {
         // 发送请求
-        const host = 'http://127.0.0.1:6058'
         const api = '/login/create?'
         const query = "t=" + new Date().getTime() + "&v=1" + "&uname=" + data.username + "&pwd=" + data.password
         const apiurl = host + api + query

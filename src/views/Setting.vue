@@ -22,11 +22,35 @@
           </el-form-item>
 
           <el-form-item label="绑定邮箱">
-            <el-input placeholder="请输入邮箱"></el-input>
+            <el-input placeholder="请输入邮箱" disabled></el-input>
           </el-form-item>
 
           <el-form-item label="修改密码">
-            <el-button type="primary">修改密码</el-button>
+            <el-button type="primary" disabled>修改密码</el-button>
+          </el-form-item>
+        </el-form>
+      </el-card>
+
+      <!-- 后端设置 -->
+      <el-card class="card-item">
+        <template #header>
+          <div class="card-header">
+            <h2>后端接口设置</h2>
+            <el-tooltip effect="light" content="设置您的API接口地址">
+              <el-icon :size="16" class="ml-2">
+                <svg t="1741239983384" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2413" width="200" height="200"><path d="M512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z m-45.504-728v288.896a48 48 0 1 0 96 0V296a48 48 0 0 0-96 0z m48 496a48 48 0 1 0 0-96 48 48 0 0 0 0 96z" fill="#707070" p-id="2414"></path></svg>
+              </el-icon>
+            </el-tooltip>
+          </div>
+        </template>
+
+        <el-form label-width="120px">
+          <el-form-item label="后端地址">
+            <el-input v-model="backendHost" placeholder="请输入后端接口地址"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="saveBackendHost">保存</el-button>
+            <el-button @click="resetBackendHost">重置</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -36,7 +60,7 @@
         <template #header>
           <div class="card-header">
             <h2>日历同步</h2>
-            <el-tooltip effect="light" content="该设置可以设置ICS日历文件同步至您的设备的时间间隔">
+            <el-tooltip effect="light" content="设置您的ICS日历文件同步时间间隔">
               <el-icon :size="16" class="ml-2">
                 <svg t="1741239983384" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2413" width="200" height="200"><path d="M512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z m-45.504-728v288.896a48 48 0 1 0 96 0V296a48 48 0 0 0-96 0z m48 496a48 48 0 1 0 0-96 48 48 0 0 0 0 96z" fill="#707070" p-id="2414"></path></svg>
               </el-icon>
@@ -113,10 +137,32 @@
 
 <script setup>
 import { ref } from 'vue';
-
-// 从localStorage读取用户名
+import { ElMessage } from 'element-plus';
+// 读取本地存储的用户信息
 const userInfo = JSON.parse(localStorage.getItem('loginedUserInfo')) || {};
+
+// 账号设置
 const username = ref(userInfo.username || '');
+const email = ref(userInfo.email || '');
+
+// 读取后端接口设置（默认 127.0.0.1:6058）
+const backendSettings = JSON.parse(localStorage.getItem('backendHost')) || { host: '127.0.0.1:6058' };
+const backendHost = ref(backendSettings.host);
+
+// 保存后端地址到 localStorage
+const saveBackendHost = () => {
+  localStorage.setItem('backendHost', JSON.stringify({ host: backendHost.value }));
+  ElMessage.success('后端地址已更新');
+};
+
+// 还原后端地址到默认值
+const resetBackendHost = () => {
+  backendHost.value = '127.0.0.1:6058';
+  localStorage.setItem('backendHost', JSON.stringify({ host: backendHost.value }));
+  ElMessage.success('后端地址已设置为默认值');
+}
+
+
 </script>
 
 <style scoped>
