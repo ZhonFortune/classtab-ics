@@ -4,7 +4,7 @@
 
 <br>
 
-[在线DEMO](/) | [快速开始](#quick-start) | [后端](https://github.com/ZhonFortune/classtab-ics-backend) | [使用文档](/)
+[在线DEMO](/) | [快速开始](#quick-start) | [后端](https://github.com/ZhonFortune/classtab-ics-backend) | [使用文档](/docs/)
 
 ---
 
@@ -30,7 +30,7 @@
 # 快速开始 :rocket: <a id="quick-start"></a>
 
 如果您有相关知识，可以按照以下步骤快速开始：
-若您没有相关知识亦想体验本项目，请阅读[使用文档](/)。
+若您没有相关知识亦想体验本项目，请阅读[使用文档](/docs/)。
 ## 安装
 
 ```shell
@@ -60,7 +60,7 @@ http://localhost:6058
 
 ## 部署
 
-若您需要部署至服务器，请阅读[使用文档-部署](/)
+若您需要部署至服务器，请阅读[使用文档-部署](/docs/)
 
 <br>
 
