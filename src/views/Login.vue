@@ -60,7 +60,8 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router'
 import axios from 'axios';
-const host = "http://" + JSON.parse(localStorage.getItem('backendHost')).host || 'http://127.0.0.1:6058'
+import { getBackendHost } from '@/assets/libs/backend';
+const host = getBackendHost();
 
 const router = useRouter()
 

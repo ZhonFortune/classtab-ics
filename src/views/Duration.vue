@@ -135,8 +135,9 @@ import { computed, ref, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import CryptoJS from "crypto-js";
 import axios from "axios";
+import { getBackendHost } from "@/assets/libs/backend";
 
-const host = "http://" + JSON.parse(localStorage.getItem('backendHost')).host || 'http://127.0.0.1:6058'
+const host = getBackendHost();
 
 export default {
   setup() {

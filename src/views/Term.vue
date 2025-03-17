@@ -1,129 +1,384 @@
 <template>
-  <el-container class="about-container">
-    <el-main class="main-content">
-      <!-- 项目介绍 -->
-      <el-card class="scrollable-card">
-        <h2>项目介绍 ✅</h2>
-        <p style="margin-top: 15px; margin-bottom: 15px;">
-          本项目致力于为学生提供便捷的课表查询和课程提醒功能。通过使用 Vue.js 和 Element Plus 框架，我们构建了一个现代化的 Web 应用程序，用户可以轻松地查看和管理自己的课程表。
-            我们还为项目添加了ICS文件功能，用户可以方便地将课表信息导出为ICS文件，以便在其他日历应用程序中使用。您亦可以选择通过使用您的IPHONE手机，通过扫描QRcode，将订阅日历添加到您的APPLE日历中。
-            订阅日历课根据您的课表自动更新，您无需手动同步。这方便您应对学校的临时调课。我们将在不久的将来接入各大学校教务系统，提供更加便捷快速的课表查询服务。
-        </p >
-      </el-card>
+  <div class="semester-management">
+    <el-card class="main-card">
+      <template #header>
+        <div class="card-header">
+          <span class="title">学期信息</span>
+          <div v-if="currentSemester" class="actions">
+            <el-tooltip content="编辑学期" placement="bottom">
+              <el-icon @click="openEditDialog" class="action-icon">
+                <Edit />
+              </el-icon>
+            </el-tooltip>
+          </div>
+        </div>
+      </template>
 
-      <el-divider />
+      <div class="content">
+        <div v-if="currentSemester" class="semester-info">
+          <div class="info-item">
+            <span class="label">学期名称：</span>
+            <span class="value">{{ currentSemester.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">开始日期：</span>
+            <span class="value">{{ currentSemester.startDate | dateFormat }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">结束日期：</span>
+            <span class="value">{{ currentSemester.endDate | dateFormat }}</span>
+          </div>
+        </div>
 
-      <!-- 核心贡献者 -->
-      <h2 class="section-title">核心贡献者</h2>
-      <el-row :gutter="20" justify="center">
-        <el-col v-for="(contributor, index) in contributors" :key="index" :xs="24" :sm="12" :md="8" :lg="6">
-          <el-card shadow="hover" class="team-card">
-            <el-avatar :size="80" :src="contributor.avatar" />
-            <h3>{{ contributor.name }}</h3>
-            <p>{{ contributor.role }}</p >
-            <el-button link type="primary" plain="true">联系我</el-button>
-          </el-card>
-        </el-col>
-      </el-row>
+        <div v-else class="empty-state">
+          <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/aphqeh7uhohpquloj/empty-state/empty-schedule.svg" alt="暂无学期" class="empty-img">
+          <p class="empty-tip">当前没有学期信息</p>
+          <p class="empty-desc">点击下方按钮创建新的学期</p>
+        </div>
+      </div>
 
-      <el-divider />
+      <template #footer>
+        <div class="button-group">
+          <el-button 
+            type="primary" 
+            @click="openCreateDialog" 
+            v-if="!currentSemester"
+            class="create-btn"
+          >
+            新建学期
+            <el-icon class="ml-2">
+              <Plus />
+            </el-icon>
+          </el-button>
+        </div>
+      </template>
+    </el-card>
 
-      <!-- 如何参与 -->
-      <el-card class="scrollable-card">
-        <h2>如何参与 🔩</h2>
-        <p>我们欢迎所有对项目感兴趣的开发者参与贡献！您可以：</p >
-        <ul style="margin-top: 15px; margin-bottom: 15px;">
-          <li>在 <el-button link @click="githubUrl" target="_blank">GitHub</el-button> 上提交 Issue 或 Pull Request</li>
-          <li>加入我们的社区，与其他开发者交流</li>
-          <li>帮助改进文档或撰写教程</li>
-        </ul>
-      </el-card>
+    <!-- 学期编辑对话框 -->
+    <el-dialog
+      :visible.sync="dialogVisible"
+      title="学期编辑"
+      width="480px"
+      :before-close="handleClose"
+      custom-class="semester-dialog"
+    >
+      <el-form 
+        :model="semesterForm" 
+        label-width="100px" 
+        class="edit-form"
+        ref="formRef"
+      >
+        <el-form-item label="学期名称" prop="name">
+          <el-input 
+            v-model.trim="semesterForm.name"
+            placeholder="请输入学期名称（如：2025-2026学年第一学期）"
+          />
+        </el-form-item>
 
-      <el-divider />
+        <el-form-item label="开始日期" prop="startDate">
+          <el-date-picker
+            v-model="semesterForm.startDate"
+            type="date"
+            placeholder="选择开始日期"
+            format="yyyy年MM月dd日"
+            value-format="yyyy-MM-dd"
+            :disabled-date="disabledStartDate"
+          />
+        </el-form-item>
 
-      <!-- 联系方式 -->
-      <el-card class="scrollable-card" style="margin-bottom: 100px;">
-        <h2>联系我们 📝</h2>
-        <el-descriptions border :column="1" style="margin-top: 15px; margin-bottom: 15px;">
-          <el-descriptions-item label="GitHub">
-            <el-button link type="primary" @click="githubUrl" target="_blank">跳转GitHub</el-button>
-          </el-descriptions-item>
-          <el-descriptions-item label="社区讨论">
-            <el-button link type="info" disabled @click="communityUrl" target="_blank">(我们将根据使用人数以及需求决定是否开放社区讨论)</el-button>
-          </el-descriptions-item>
-          <el-descriptions-item label="邮件">
-            <el-button link type="primary" @click="contactEmail">连接我的邮箱</el-button>
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-card>
-    </el-main>
-  </el-container>
+        <el-form-item label="结束日期" prop="endDate">
+          <el-date-picker
+            v-model="semesterForm.endDate"
+            type="date"
+            placeholder="选择结束日期"
+            format="yyyy年MM月dd日"
+            value-format="yyyy-MM-dd"
+            :disabled-date="disabledEndDate"
+          />
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button 
+            type="primary" 
+            @click="handleSave"
+            :loading="isLoading"
+          >
+            保存
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { ElMessage } from 'element-plus';
+<script>
+import { ref, computed, defineComponent } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Edit, Plus } from '@element-plus/icons-vue'
 
-const contributors = ref([
-  { name: 'Moe.', role: '核心开发者', avatar: 'https://api.dicebear.com/7.x/miniavs/svg?seed=Alice' },
-  { name: '[期待你的加入]', role: '文档维护者', avatar: 'https://api.dicebear.com/7.x/miniavs/svg?seed=Bob' },
-  { name: '[期待你的加入]', role: '社区运营', avatar: 'https://api.dicebear.com/7.x/miniavs/svg?seed=Charlie' },
-  { name: '[期待你的加入]', role: '代码贡献者', avatar: 'https://api.dicebear.com/7.x/miniavs/svg?seed=David' }
-]);
+export default defineComponent({
+  components: { Edit, Plus },
+  setup() {
+    // 状态管理
+    const currentSemester = ref(null) // 模拟初始无学期
+    const dialogVisible = ref(false)
+    const isLoading = ref(false)
+    const formRef = ref(null)
 
-const githubUrl = () => {
-    window.open('https://github.com/ZhonFortune/classtab-ics', '_blank');
-}
-
-const communityUrl = () => {
-    ElMessage({
-        message: '敬请期待',
-        type: 'info',
+    // 表单数据
+    const semesterForm = ref({
+      name: '',
+      startDate: null,
+      endDate: null
     })
-}
 
-const contactEmail = () => {
-    window.open('mailto:zhonfortune@outlook.com', '_blank');
-}
+    // 日期禁用规则
+    const disabledStartDate = (time) => {
+      return time.getTime() < Date.now() - 86400000
+    }
+
+    const disabledEndDate = (time) => {
+      if (!semesterForm.value.startDate) return false
+      return time.getTime() < new Date(semesterForm.value.startDate).getTime()
+    }
+
+    // 方法
+    const openCreateDialog = () => {
+      semesterForm.value = { name: '', startDate: null, endDate: null }
+      dialogVisible.value = true
+    }
+
+    const openEditDialog = () => {
+      semesterForm.value = { ...currentSemester.value }
+      dialogVisible.value = true
+    }
+
+    const handleSave = async () => {
+      try {
+        isLoading.value = true
+        await formRef.value.validate()
+        
+        // 模拟API请求
+        await new Promise(resolve => setTimeout(resolve, 800))
+        
+        currentSemester.value = { ...semesterForm.value }
+        ElMessage.success('保存成功')
+        dialogVisible.value = false
+      } catch (error) {
+        ElMessage.error('请检查输入内容')
+      } finally {
+        isLoading.value = false
+      }
+    }
+
+    const handleClose = () => {
+      ElMessageBox.confirm('是否放弃当前修改？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        dialogVisible.value = false
+        semesterForm.value = currentSemester ? { ...currentSemester.value } : { name: '', startDate: null, endDate: null }
+      })
+    }
+
+    // 计算属性
+    const dateFormat = computed({
+      get: () => (date) => {
+        if (!date) return '未设置'
+        const d = new Date(date)
+        return d.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })
+      }
+    })
+
+    return {
+      currentSemester,
+      dialogVisible,
+      isLoading,
+      formRef,
+      semesterForm,
+      openCreateDialog,
+      openEditDialog,
+      handleSave,
+      handleClose,
+      disabledStartDate,
+      disabledEndDate,
+      dateFormat
+    }
+  }
+})
 </script>
 
 <style scoped>
-.about-container {
+.semester-management {
   height: 100vh;
+  padding: 24px;
+  background: #f0f2f5;
+}
+
+.main-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(16, 24, 40, 0.08);
+  overflow: hidden;
+}
+
+.card-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #ebedf0;
 }
 
-.main-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
-.scrollable-card {
-  margin-bottom: 20px;
-  padding: 20px;
-  border: 0;
+.actions .action-icon {
+  font-size: 1.125rem;
+  color: #409eff;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
-.section-title {
-  text-align: center;
-  margin: 20px 0;
-  color: #333;
+.actions .action-icon:hover {
+  color: #2b6bd3;
 }
 
-.team-card {
-  text-align: center;
-  padding: 20px;
-  border: 0px;
+.content {
+  padding: 24px;
 }
 
-.team-card h3 {
-  margin: 10px 0 5px;
+.semester-info {
+  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  row-gap: 12px;
 }
 
-.team-card p {
+.info-item {
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  min-width: 80px;
+  font-weight: 500;
   color: #666;
-  font-size: 14px;
+}
+
+.value {
+  flex: 1;
+  color: #333;
+  font-size: 0.975rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.empty-img {
+  width: 200px;
+  margin-bottom: 16px;
+}
+
+.empty-tip {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.empty-desc {
+  color: #666;
+  font-size: 0.975rem;
+}
+
+.button-group {
+  padding: 24px;
+  border-top: 1px solid #ebedf0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.create-btn {
+  padding: 10px 24px;
+  font-weight: 500;
+  background: #409eff;
+  color: white;
+  border-radius: 6px;
+  transition: transform 0.2s;
+}
+
+.create-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
+}
+
+.semester-dialog .el-dialog__header {
+  background: #409eff;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 16px 16px 0 0;
+}
+
+.semester-dialog .el-dialog__body {
+  padding: 24px;
+}
+
+.edit-form {
+  gap: 16px;
+}
+
+.el-form-item {
+  margin-bottom: 0;
+}
+
+.el-date-picker {
+  width: 100%;
+}
+
+.dialog-footer {
+  padding: 16px 24px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .semester-management {
+    padding: 16px;
+  }
+
+  .main-card {
+    border-radius: 12px;
+  }
+
+  .card-header {
+    padding: 16px;
+  }
+
+  .semester-info {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    padding: 12px;
+  }
+
+  .empty-img {
+    width: 160px;
+  }
 }
 </style>

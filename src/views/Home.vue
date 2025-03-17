@@ -1,6 +1,6 @@
 <template>
   <el-container style="
-    height: 100%; padding: 0px; margin: 0px; width: 100%;
+    height: 100%; padding: 0px; margin: 0px; width: 100%; 
   ">
     <el-aside style="
       width: 470px; height: 100%; padding: 0px; margin: 0px;
@@ -84,6 +84,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import QRcode from 'qrcode'
 import axios from 'axios'
+import { getBackendHost } from '@/assets/libs/backend';
 
 // 日历模块
 
@@ -116,7 +117,9 @@ if (!user) {
 }
 
 // 获取登录用户下的课程表
-const host = "http://" + JSON.parse(localStorage.getItem('backendHost')).host || 'http://127.0.0.1:6058'
+
+const host = getBackendHost();
+
 const getUserClassTable = () => {
   // 获取用户信息
   const uname = JSON.parse(localStorage.getItem('loginedUserInfo')).username

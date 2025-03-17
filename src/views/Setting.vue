@@ -123,8 +123,7 @@
 
         <el-checkbox-group disabled>
           <el-checkbox label="允许数据统计"></el-checkbox>
-          <el-checkbox label="显示最近文档"></el-checkbox>
-          <el-checkbox label="启用指纹登录"></el-checkbox>
+          <el-checkbox label="调试模式"></el-checkbox>
         </el-checkbox-group>
       </el-card>
     </el-main>
@@ -170,6 +169,7 @@ const resetBackendHost = () => {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #f0f2f5;
 }
 
 .main-content {

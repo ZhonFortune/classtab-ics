@@ -4,7 +4,7 @@
 
 <br>
 
-[在线DEMO](/) | [快速开始](#quick-start) | [后端](/) | [使用文档](/)
+[在线DEMO](/) | [快速开始](#quick-start) | [后端](https://github.com/ZhonFortune/classtab-ics-backend) | [使用文档](/)
 
 ---
 
@@ -35,25 +35,25 @@
 
 ```shell
 #前端
-npm install -g
+npm install -g cltab-ics
 #后端
-npm install -g
+npm install -g cltab-ics-bend
 ```
 
 ## 运行
 
 ```shell
 #前端
-citabi
+cltabi
 #后端
-citabi-backend
+cltabi-bend
 ```
 
 ## 访问
 
 ```shell
 #前端 (默认)
-http://localhost:5173
+http://localhost:6057
 #后端 (默认)
 http://localhost:6058
 ```
@@ -89,7 +89,13 @@ http://localhost:6058
 # 更新日志 :bookmark_tabs:
 
 ```shell
-#2023-03-29
+#2025-03-17
+#Beta 0.2.0
+
+- [开放] Project > 正式开放项目
+- [优化] Page > 优化了部分页面
+
+#2025-03-10
 #Beta 0.1.9
 
 - [新增] Page > Duration页面用于添加和展示课程节时配置

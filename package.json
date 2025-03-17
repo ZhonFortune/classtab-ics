@@ -1,8 +1,11 @@
 {
-  "name": "classtab-ics",
-  "version": "0.1.9",
+  "name": "cltab-ics",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
+  "bin": {
+    "citabi": "npm run preview"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
