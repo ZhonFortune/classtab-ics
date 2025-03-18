@@ -6,8 +6,9 @@
 
 [在线DEMO](/) | [快速开始](#quick-start) | [后端](https://github.com/ZhonFortune/classtab-ics-backend) | [使用文档](https://zhonfortune.github.io/classtab-ics/#/)
 
->![TIP]请注意: 本项目仍处于开发阶段，部分功能可能尚未完善或存在BUG
-但您仍可以下载先行体验部分功能
+>![TIP]
+>请注意: 本项目仍处于开发阶段，部分功能可能尚未完善或存在BUG
+>但您仍可以下载先行体验部分功能
 
 ---
 
