@@ -1,18 +1,11 @@
 <template>
   <div class="page-container">
-    <el-container style="
-      height: 50px; width: 100%; display: flex; align-items: center; justify-content: flex-start;
-      margin-top: 10px; margin-bottom: 15px;
-    ">
-      <el-button type="primary" @click="getDurationList">刷新列表</el-button>
-    </el-container>
-
     <el-tabs v-model="activeTab" class="tabs-container" border @tab-click="handleTabClick">
       <el-tab-pane label="添加课程节时配置" name="add">
         <el-tabs v-model="mode" class="mode-tabs" type="border-card">
           <!-- 自动填充模式 -->
           <el-tab-pane label="自动填充模式" name="auto">
-            <el-form label-width="180px" class="form-container">
+            <el-form label-width="180px" class="form-container" >
               <el-divider>课程设置</el-divider>
 
               <el-row :gutter="20">
@@ -75,10 +68,21 @@
             </el-form>
 
             <el-divider>预览</el-divider>
-            <el-table :data="autoSchedule" border>
+            <el-table
+              :data="autoSchedule" 
+              :row-style="{height: '80px'}"
+            >
               <el-table-column prop="index" label="节次" width="50" />
-              <el-table-column prop="startTime" label="上课时间" />
-              <el-table-column prop="endTime" label="下课时间" />
+              <el-table-column prop="startTime" label="上课时间">
+                <template #default="{ row }">
+                  <el-tag type="warning" size="large" style="font-size: 1rem;">{{ row.startTime }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="endTime" label="下课时间" >
+              <template #default="{ row }">
+                  <el-tag type="success" size="large" style="font-size: 1rem;">{{ row.endTime }}</el-tag>
+                </template>
+              </el-table-column>
             </el-table>
           </el-tab-pane>
 
@@ -101,10 +105,19 @@
             </el-form>
 
             <el-divider>预览</el-divider>
-            <el-table :data="formattedCustomSchedule" border>
+            <el-table :data="formattedCustomSchedule" :row-style="{height: '80px'}"
+            >
               <el-table-column prop="index" label="节次" width="50" />
-              <el-table-column prop="startTime" label="上课时间" />
-              <el-table-column prop="endTime" label="下课时间" />
+              <el-table-column prop="startTime" label="上课时间">
+                <template #default="{ row }">
+                  <el-tag type="warning" size="large" style="font-size: 1rem;">{{ row.startTime }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="endTime" label="下课时间" >
+              <template #default="{ row }">
+                  <el-tag type="success" size="large" style="font-size: 1rem;">{{ row.endTime }}</el-tag>
+                </template>
+              </el-table-column>
             </el-table>
           </el-tab-pane>
         </el-tabs>
@@ -117,15 +130,44 @@
       </el-tab-pane>
 
       <el-tab-pane label="查看配置" name="view">
-        <div v-for="(item, index) in durationList" :key="index" style="margin-top: 25px; margin-bottom: 30px;">
-          <h3>配置名称:【 {{ item.name }} 】</h3>
-          <el-table :data="item.data" border>
+        <el-select
+          v-model="selectedConfig"
+          placeholder="请选择要查看的配置"
+          style="width: 100%; margin: 0 auto; margin-bottom: 15px;"
+        >
+          <el-option
+            v-for="item in durationList"
+            :key="item.cid"
+            :label="item.name"
+            :value="item.cid"
+          />
+        </el-select>
+
+        <div v-for="(item, index) in durationList" :key="index" v-show="item.cid === selectedConfig" class="config-item">
+          <el-table 
+            :data="item.list"
+            :row-style="{height: '60px'}"
+          >
             <el-table-column prop="num" label="节次" width="50" />
-            <el-table-column prop="start" label="上课时间" />
-            <el-table-column prop="end" label="下课时间" />
+            <el-table-column prop="start" label="上课时间">
+              <template #default="{ row }">
+                <el-tag type="warning" size="large" style="font-size: 1rem;">{{ row.start }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="end" label="下课时间" >
+              <template #default="{ row }">
+                <el-tag type="success" size="large" style="font-size: 1rem;">{{ row.end }}</el-tag>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
+
+        <div v-if="!selectedConfig" class="empty-state" style="margin-left: 20px;">
+          <p class="empty-tip">请选择要查看的课程节时配置</p>
+          <p class="empty-desc">在左侧「添加课程节时配置」中创建配置后即可查看</p>
+        </div>
       </el-tab-pane>
+
     </el-tabs>
   </div>
 </template>
@@ -279,7 +321,7 @@ export default {
       // 发送添加请求
       const path = `/class/duration/add`
       const url = host + path
-      console.log(url);
+      // console.log(url);
       if (durationData.data.length === 0) {
         ElMessage.warning("请填写 节时配置");
         return;
@@ -323,6 +365,7 @@ export default {
 
     // 查询配置
     const durationList = ref([]);
+    const selectedConfig = ref(null);
     const getDurationList = () => {
 
       // TODO: 查询配置
@@ -354,7 +397,19 @@ export default {
 
               // 查询data中与cid对应的数据 放到durationList中
               for (let j = 0; j < data.length; j++) {
-                const itemdata = data[j];
+                const cid = data[j].cid;
+                const end = data[j].end;
+                const num = data[j].num;
+                const start = data[j].start;
+                const ccid = data[j].ccid;
+                const itemdata = {
+                  cid: cid,
+                  ccid: ccid,
+                  name: data[j].duraname,
+                  num: num,
+                  start: start,
+                  end: end,
+                }
                 if (itemdata.cid === currentCid) {
                   durationTemp.push(itemdata);
                 }
@@ -363,8 +418,8 @@ export default {
               // 将durationTemp添加到durationList中
               durationList.value.push({
                 cid: currentCid,
-                name: durationTemp[0].duraname,
-                data: durationTemp,
+                name: durationTemp[0].name,
+                list: durationTemp,
               });
             }
 
@@ -385,6 +440,7 @@ export default {
     const handleTabClick = (tab) => {
       if (tab.name === 'view') {
         getDurationList();
+        selectedConfig.value = null;
       }
     };
 
@@ -408,7 +464,8 @@ export default {
       formatTime,
       getDurationList,
       durationList,
-      handleTabClick
+      handleTabClick,
+      selectedConfig,
     };
   }
 }
@@ -442,7 +499,6 @@ export default {
 .form-actions {
   margin-top: 20px;
   text-align: left;
-  /* 预览按钮左对齐 */
 }
 
 .submit-container {
@@ -522,11 +578,4 @@ h3 {
   padding-bottom: 5px;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .el-table {
-    width: 100%;
-    overflow-x: auto;
-  }
-}
 </style>

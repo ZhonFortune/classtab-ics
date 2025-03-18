@@ -1,59 +1,95 @@
 <template>
     <el-container class="container">
-        <el-header style="height: auto; width: 100%; margin-top: 15px;">
-            <el-card v-for="(item, index) in apiList" :key="index" class="api-card" shadow="hidden">
-                <el-descriptions title="" :column="2" border>
-                    <el-descriptions-item label="接口名称" label-align="left">
-                        <el-text>{{ item.name }}</el-text>
-                    </el-descriptions-item>
-                    <el-descriptions-item label="状态" label-align="right">
-                        <el-tag :type="item.status === '在线' ? 'success' : 'danger'">{{ item.status }}</el-tag>
-                    </el-descriptions-item>
-                    <el-descriptions-item label="请求地址" :span="2">
-                        <el-link type="primary" :href="item.url" target="_blank">{{ item.url }}</el-link>
-                    </el-descriptions-item>
-                    <el-descriptions-item label="请求方式">
-                        <el-tag>{{ item.method }}</el-tag>
-                    </el-descriptions-item>
-                    <el-descriptions-item label="请求参数" label-align="right">
-                        <span v-if="item.params">{{ JSON.stringify(item.params, null, 2) }}</span>
-                        <span v-else>无</span>
-                    </el-descriptions-item>
-                </el-descriptions>
-            </el-card>
+        <el-header class="header">
+            <el-button type="primary" @click="getApiList">刷新列表</el-button>
         </el-header>
-
-        <el-footer style="width: 100%; display: flex; justify-content: flex-start; padding-bottom: 120px;">
-            <el-button type="primary" @click="getApiList" style="margin-left: 20px;">刷新列表</el-button>
+        <el-main class="main">
+            <el-table 
+                :data="apiList"
+                stripe
+                style="width: 100%; margin: 0 auto;"
+                show-overflow-tooltip
+                table-layout="fixed"
+                :row-style="{height: '120px'}"
+            >
+                <el-table-column prop="name" label="接口名称"></el-table-column>
+                <el-table-column prop="status" label="状态">
+                    <template #default="{ row }">
+                        <el-tag :type="row.status === '在线' ? 'success' : 'danger'">{{ row.status }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="url" label="请求地址">
+                    <template #default="{ row }">
+                        <el-link type="primary" :href="row.url" target="_blank">{{ row.url }}</el-link>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="method" label="请求方式">
+                    <template #default="{ row }">
+                        <el-tag>{{ row.method }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="params" label="请求参数">
+                    <template #default="{ row }">
+                        <span v-if="row.params">{{ JSON.stringify(row.params, null, 2) }}</span>
+                        <span v-else>无</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-main>
+        <el-footer class="footer">
+            
         </el-footer>
     </el-container>
 </template>
 
 <style scoped>
 .container {
+    display: flex;
+    flex-direction: column;
     height: 100vh;
     width: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
     overflow-y: auto;
-    margin-bottom: 50px;
 }
 
-.api-card {
-    width: 100%;
-    margin-bottom: 20px;
-    border: 0;
+.header {
+    display: flex; width: 100%;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e4e7ed;
+}
+
+.main {
+    flex: 1; width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.footer {
+    padding: 15px 20px;
+    background-color: #f5f7fa;
+    border-top: 1px solid #e4e7ed;
+    text-align: center;
+}
+
+.el-table .el-table__cell {
+    display: flex;
+    align-items: center;
+}
+
+.el-table__row:nth-child(even) {
+    background-color: #f9fafb;
 }
 </style>
 
 <script setup>
+import { getBackendHost } from '@/assets/libs/backend';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { ref, onMounted } from 'vue';
 
 // 读取后端地址，增加默认值防止 JSON 解析错误
-const host = "http://" + JSON.parse(localStorage.getItem('backendHost')).host || 'http://127.0.0.1:6058'
+const host = getBackendHost();
 
 // API 列表
 const apiList = ref([]);
@@ -84,7 +120,7 @@ const getApiList = async () => {
                 params: item.params,
             };
         });
-
+        ElMessage.success('获取 API 列表成功');
         apiList.value = await Promise.all(promises);
     } catch (error) {
         ElMessage.error('获取 API 列表失败');
@@ -96,4 +132,4 @@ const getApiList = async () => {
 onMounted(() => {
     getApiList();
 });
-</script>
+</script>    

@@ -21,13 +21,13 @@
 
 ---
 
-## 项目版本
+## 项目
 
 前端
-- [**Beta 0.2.3**](https://github.com/ZhonFortune/classtab-ics)
+- [**ClassTab-ICS**](https://github.com/ZhonFortune/classtab-ics)
 
 后端
-- [**Beta 0.0.9**](https://github.com/ZhonFortune/classtab-ics-backend)
+- [**ClassTab-ICS-Backend**](https://github.com/ZhonFortune/classtab-ics-backend)
 
 <br>
 

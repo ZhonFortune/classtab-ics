@@ -101,7 +101,7 @@ const user = route.params.user
 // 检查是否有参数
 if (!user) {
   router.push({ name: 'Login' })
-} else if (user) {
+} else {
   const loginedUserInfo = localStorage.getItem('loginedUserInfo')
   if (loginedUserInfo) {
     const loginedUser = JSON.parse(loginedUserInfo).username
@@ -112,30 +112,18 @@ if (!user) {
     // 没有登录信息，重定向到登录页面
     router.push({ name: 'Login' })
   }
-}else if (!user) {
-  // 如果没有参数 则检查是否有登录信息
 }
 
 // 获取登录用户下的课程表
-
 const host = getBackendHost();
 
 const getUserClassTable = () => {
-  // 获取用户信息
-  const uname = JSON.parse(localStorage.getItem('loginedUserInfo')).username
-  const utoken = JSON.parse(localStorage.getItem('loginedUserInfo')).token
-  // 请求后端拿到用户
-  const path = '/class/getlist?' + 'utoken=' + utoken
-  const url = host + path
-  axios.get(url, {}).then((res) => {
-  }).catch((err) => {
-    console.log(err)
-  })
+  
 }
 
 // 在组件挂载时执行
 onMounted(() => {
-  // getUserClassTable()
+  getUserClassTable()
 });
 
 

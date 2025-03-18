@@ -36,7 +36,7 @@ npm i -g cltab-ics-bend
 
 启动命令
 ```bash
-cltabi
+cltabi-bend
 ```
 
 默认运行地址为 `http://localhost:6057`

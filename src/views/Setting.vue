@@ -26,31 +26,7 @@
           </el-form-item>
 
           <el-form-item label="修改密码">
-            <el-button type="primary" disabled>修改密码</el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
-
-      <!-- 后端设置 -->
-      <el-card class="card-item">
-        <template #header>
-          <div class="card-header">
-            <h2>后端接口设置</h2>
-            <el-tooltip effect="light" content="设置您的API接口地址">
-              <el-icon :size="16" class="ml-2">
-                <svg t="1741239983384" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2413" width="200" height="200"><path d="M512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z m-45.504-728v288.896a48 48 0 1 0 96 0V296a48 48 0 0 0-96 0z m48 496a48 48 0 1 0 0-96 48 48 0 0 0 0 96z" fill="#707070" p-id="2414"></path></svg>
-              </el-icon>
-            </el-tooltip>
-          </div>
-        </template>
-
-        <el-form label-width="120px">
-          <el-form-item label="后端地址">
-            <el-input v-model="backendHost" placeholder="请输入后端接口地址"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="saveBackendHost">保存</el-button>
-            <el-button @click="resetBackendHost">重置</el-button>
+            <el-button type="primary" disabled style="width: 100px;">修改密码</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -68,7 +44,7 @@
           </div>
         </template>
 
-        <el-form label-width="150px">
+        <el-form label-width="120px">
           <el-form-item label="自动同步">
             <el-switch disabled></el-switch>
           </el-form-item>
@@ -78,19 +54,15 @@
               <el-option label="每天" value="daily"></el-option>
             </el-select>
           </el-form-item>
-        </el-form>
 
-        <div class="sync-buttons" style="padding: 15px 20px;">
-          <el-button 
-            type="primary" 
-            disabled
-          >
-            立刻同步
-          </el-button>
-        </div>
+          <el-form-item>
+            <el-button type="primary" disabled style="width: 100px;">保存</el-button>
+            <el-button type="primary" disabled style="width: 100px;">立刻同步</el-button>
+          </el-form-item>
+        </el-form>
       </el-card>
 
-      <!-- 界面布局 -->
+      <!-- 界面布局
       <el-card class="card-item">
         <template #header>
           <div class="card-header">
@@ -111,26 +83,65 @@
             <el-slider :min="12" :max="24" step="2" disabled></el-slider>
           </el-form-item>
         </el-form>
-      </el-card>
+      </el-card> -->
 
-      <!-- 隐私设置 -->
+      <!-- 后端设置 -->
       <el-card class="card-item">
         <template #header>
           <div class="card-header">
-            <h2>隐私设置</h2>
+            <h2>后端接口设置</h2>
+            <el-tooltip effect="light" content="设置您的API接口地址">
+              <el-icon :size="16" class="ml-2">
+                <svg t="1741239983384" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2413" width="200" height="200"><path d="M512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z m-45.504-728v288.896a48 48 0 1 0 96 0V296a48 48 0 0 0-96 0z m48 496a48 48 0 1 0 0-96 48 48 0 0 0 0 96z" fill="#707070" p-id="2414"></path></svg>
+              </el-icon>
+            </el-tooltip>
+          </div>
+        </template>
+
+        <el-form label-width="120px">
+          <el-form-item label="后端地址">
+            <el-input v-model="backendHost" placeholder="请输入后端接口地址"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="saveBackendHost" style="width: 100px;">保存</el-button>
+            <el-button @click="resetBackendHost" style="width: 80px;">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </el-card>
+
+      <!-- 调试设置 -->
+      <el-card class="card-item">
+        <template #header>
+          <div class="card-header">
+            <h2>调试设置</h2>
           </div>
         </template>
 
         <el-checkbox-group disabled>
-          <el-checkbox label="允许数据统计"></el-checkbox>
-          <el-checkbox label="调试模式"></el-checkbox>
+          <el-checkbox label="关闭控制台日志输出"></el-checkbox>
         </el-checkbox-group>
+      </el-card>
+
+      <!-- 数据集 -->
+      <el-card class="card-item">
+        <template #header>
+          <div class="card-header">
+            <h2>数据集</h2>
+          </div>
+        </template>
+
+        <el-tooltip effect="light" content="将此账号从数据库中移除,并退出登录">
+          <el-button type="danger">抹掉账号</el-button>
+        </el-tooltip>
+
+        <el-tooltip effect="light" content="将此账号的 节时配置/学期/课程 数据从数据库中移除,但保留账号">
+          <el-button type="danger">抹掉数据</el-button>
+        </el-tooltip>
+
       </el-card>
     </el-main>
 
-    <el-footer style="padding: 20px;">
-      <el-button type="primary" disabled>保存设置</el-button>
-    </el-footer>
+    <el-footer></el-footer>
   </el-container>
 </template>
 
@@ -199,12 +210,12 @@ const resetBackendHost = () => {
   color: #333;
 }
 
-.sync-buttons {
+/* .sync-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   padding: 15px 20px;
-}
+} */
 
 .el-tooltip {
   vertical-align: middle;

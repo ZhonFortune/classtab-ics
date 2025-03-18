@@ -4,7 +4,10 @@
 
 <br>
 
-[在线DEMO](/) | [快速开始](#quick-start) | [后端](https://github.com/ZhonFortune/classtab-ics-backend) | [使用文档](/docs/)
+[在线DEMO](/) | [快速开始](#quick-start) | [后端](https://github.com/ZhonFortune/classtab-ics-backend) | [使用文档](https://zhonfortune.github.io/classtab-ics/#/)
+
+>![TIP]请注意: 本项目仍处于开发阶段，部分功能可能尚未完善或存在BUG
+但您仍可以下载先行体验部分功能
 
 ---
 
@@ -30,7 +33,7 @@
 # 快速开始 :rocket: <a id="quick-start"></a>
 
 如果您有相关知识，可以按照以下步骤快速开始：
-若您没有相关知识亦想体验本项目，请阅读[使用文档](/docs/)。
+若您没有相关知识亦想体验本项目，请阅读[使用文档](https://zhonfortune.github.io/classtab-ics/#/)。
 ## 安装
 
 ```shell
@@ -60,7 +63,7 @@ http://localhost:6058
 
 ## 部署
 
-若您需要部署至服务器，请阅读[使用文档-部署](/docs/)
+若您需要部署至服务器，请阅读[使用文档-部署](https://zhonfortune.github.io/classtab-ics/#/deploy)
 
 <br>
 
@@ -89,6 +92,15 @@ http://localhost:6058
 # 更新日志 :bookmark_tabs:
 
 ```shell
+#2025-03-18
+#Beta 0.3.3
+
+- [优化] Page > 优化了部分页面的UI
+- [新增] Setting > 抹除数据功能
+- [新增] Document > 添加了使用文档
+- [后端] Backend > 修改部分接口逻辑
+- [修复] BUG > 修复了部分BUG
+
 #2025-03-17
 #Beta 0.2.3
 

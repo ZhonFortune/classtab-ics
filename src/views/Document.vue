@@ -1,11 +1,9 @@
 <template>
-    <el-text size="large" style="margin-top: 20px; margin-bottom: 20px;">Document</el-text>
+  <iframe src="/docs/index.html" frameborder="0" style="width: 100%; height: 90vh; padding: 0px;"></iframe>
 </template>
 
-<style scoped></style>
-
-<script lang="js">
+<script>
 export default {
-    name: 'About'
+  name: 'DocsComponent'
 }
 </script>
