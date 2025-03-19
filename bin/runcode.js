@@ -1,5 +1,17 @@
 #!/usr/bin/env node
 import { exec } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+// 获取当前脚本所在的目录
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// 假设项目根目录是脚本所在目录的上一级目录，你可以根据实际情况修改
+const projectRoot = join(__dirname, '..');
+
+// 切换到项目根目录
+process.chdir(projectRoot);
 
 exec('vite build', (buildError, buildStdout, buildStderr) => {
     if (buildError) {
@@ -7,7 +19,7 @@ exec('vite build', (buildError, buildStdout, buildStderr) => {
         console.error(`${buildError.message}`);
         return;
     }
-    console.log(`Build Success:`)
+    console.log(`Build Success:`);
     console.log(`${buildStdout}`);
 
     const previewProcess = exec('vite preview', (previewError, previewStdout, previewStderr) => {

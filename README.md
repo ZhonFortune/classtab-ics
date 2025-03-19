@@ -93,6 +93,11 @@ http://localhost:6058
 # 更新日志 :bookmark_tabs:
 
 ```shell
+#2025-03-19
+#Beta 0.3.4
+
+- [修复] BUG > 修复了服务器无法构建的bug
+
 #2025-03-18
 #Beta 0.3.3
 
