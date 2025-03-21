@@ -45,7 +45,7 @@ const routes = [
     }
   },
   {
-    path: '/setting/:user',
+    path: '/setting',
     name: 'Setting',
     component: Setting,
     meta: {
@@ -123,30 +123,36 @@ const router = createRouter({
   routes,
 });
 
-// 路由守卫 未登录时进入任何页面都会被重定向到登录页面 校验localStorage中的username
+// 路由守卫
+// 检索值: localStorage.loginedUserInfo.username & localStorage.host
+// 规则: 
+// 未登录时进入任何页面都会被重定向到登录页面
+// 无论是否登录都放行设置页面
 router.beforeEach((to, from, next) => {
   const loginedUser = localStorage.getItem('loginedUserInfo');
-  if (!loginedUser && to.name !== 'Login') {
+  // 如果访问设置页面，直接放行
+  if (to.name === 'Setting') {
+    next();
+    return;
+  }
+  // 如果不是　则重定向到登录页面
+  else if (!loginedUser && to.name !== 'Login') {
     next({
       name: 'Login'
     });
-  } else {
+  }
+  // 如果已经登录，则放行
+  else {
     next();
   }
 });
 
-// 清除localStorage中的username
-router.afterEach((to, from) => {
-  if (to.name === 'Login') {
-    localStorage.removeItem('loginedUserInfo');
-  }
-});
 
 // 清除localStorage中的username
 router.afterEach((to, from) => {
   if (to.name === 'Login') {
     localStorage.removeItem('loginedUserInfo');
   }
-})
+});
 
 export default router;
